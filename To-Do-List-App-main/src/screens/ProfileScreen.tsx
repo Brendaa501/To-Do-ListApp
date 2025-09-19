@@ -2,7 +2,7 @@ import React from "react";
 import { Box, Text, VStack, Button } from "native-base";
 import NavBar from "./components/NavBar";
 
-// Define os tipos das props que a tela recebe
+//  tipos das props que a tela recebe
 interface ProfileProps {
   goTo: (screen: "tasks" | "login") => void; // função para navegar entre telas
   user: { name: string; email: string };     // dados do usuário logado
@@ -28,7 +28,7 @@ export default function ProfileScreen({ goTo, user, logout }: ProfileProps) {
       <VStack flex={1} justifyContent="center" alignItems="center" space={4} p={5}>
         {/* Avatar com iniciais */}
         <Box
-          w={24} h={24}                    // círculo maior
+          w={24} h={24}                    
           borderRadius="full"
           bg="green.700"
           justifyContent="center"
@@ -38,7 +38,7 @@ export default function ProfileScreen({ goTo, user, logout }: ProfileProps) {
           <Text
             color="white"
             fontWeight="bold"
-            fontSize="4xl"                  // letra grande
+            fontSize="4xl"                  
             textAlign="center"
           >
             {getInitials(user.name)}

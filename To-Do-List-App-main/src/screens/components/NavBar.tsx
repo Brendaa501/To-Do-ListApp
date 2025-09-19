@@ -33,7 +33,7 @@ export default function NavBar({
     <Box bg="green.500" px={4} py={3}>
       <HStack alignItems="center" justifyContent="space-between">
 
-        {/* Botão de voltar ou logo clicável */}
+        {/*  logo clicável */}
         {showBack ? (
           <IconButton
             icon={<Icon as={Ionicons} name="arrow-back" color="white" size="lg" />}
@@ -52,34 +52,34 @@ export default function NavBar({
           </Pressable>
         )}
 
-        {/* Título centralizado */}
+        {/* Título  */}
         <Text color="white" fontSize="lg" flex={1} textAlign="center">
           {title}
         </Text>
 
-        {/* Avatar com iniciais */}
+        {/* Avatar  */}
         {showAvatar && userName ? (
           <Pressable onPress={onAvatarPress}>
             <Box
-              w={16} h={16}                  // tamanho do círculo
+              w={16} h={16}                  
               borderRadius="full"
-              bg="green.700"                 // cor de fundo
-              justifyContent="center"         // centraliza vertical
-              alignItems="center"             // centraliza horizontal
+              bg="green.700"                 
+              justifyContent="center"         
+              alignItems="center"            
               display="flex"
             >
               <Text
                 color="white"
                 fontWeight="bold"
                 fontSize="lg"
-                textAlign="center"           // centraliza texto dentro do círculo
+                textAlign="center"           
               >
                 {getInitials(userName)}
               </Text>
             </Box>
           </Pressable>
         ) : (
-          <Box w={12} h={12} />           // espaço vazio para manter layout
+          <Box w={12} h={12} />           
         )}
       </HStack>
     </Box>

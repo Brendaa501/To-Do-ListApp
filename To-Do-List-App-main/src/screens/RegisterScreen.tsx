@@ -10,16 +10,16 @@ interface RegisterProps {
   onRegister?: (user: { id: number; name: string; email: string }) => void; // callback opcional ao registrar
 }
 
-// Componente principal da tela de cadastro
+
 export default function RegisterScreen({ goToLogin, onRegister }: RegisterProps) {
 
   // Estados para armazenar dados do formulário
-  const [name, setName] = useState("");           // Nome do usuário
-  const [email, setEmail] = useState("");         // Email do usuário
-  const [password, setPassword] = useState("");   // Senha do usuário
-  const [showPassword, setShowPassword] = useState(false); // Para mostrar/ocultar senha
-  const [message, setMessage] = useState("");     // Mensagem de feedback
-  const [isError, setIsError] = useState(false);  // Indica se a mensagem é de erro
+  const [name, setName] = useState("");           
+  const [email, setEmail] = useState("");         
+  const [password, setPassword] = useState("");   
+  const [showPassword, setShowPassword] = useState(false); 
+  const [message, setMessage] = useState("");     
+  const [isError, setIsError] = useState(false);  
 
   // Função que será chamada ao pressionar o botão "Cadastrar"
   const handleRegister = async () => {

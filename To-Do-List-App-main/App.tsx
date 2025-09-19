@@ -12,6 +12,8 @@ export default function App() {
   const [user, setUser] = useState<User | null>(null);
   const [screen, setScreen] = useState<ScreenType>("login");
 
+
+  //////navegacao
   return (
     <NativeBaseProvider>
       <Box flex={1}>

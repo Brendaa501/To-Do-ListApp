@@ -6,7 +6,7 @@ import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { User } from "../../App";
 
-// Define estrutura de uma tarefa
+//  estrutura de uma tarefa
 interface Task {
   id: number;
   user_id: number;
@@ -21,7 +21,7 @@ interface TaskListScreenProps {
   goToLogin: () => void; // Logout leva à tela de login
 }
 
-// Componente principal da lista de tarefas
+
 export default function TaskListScreen({ user, goTo, goToLogin }: TaskListScreenProps) {
 
   // Estados do componente
@@ -62,14 +62,14 @@ export default function TaskListScreen({ user, goTo, goToLogin }: TaskListScreen
 
     try {
       if (editingTaskId === null) {
-        // Cria nova tarefa
+        /////////Cria nova tarefa
         await axios.post("http://localhost:3000/tasks", {
           user_id: user.id,
           text: currentTask.trim()
         }, { headers: { Authorization: `Bearer ${token}` }});
         Toast.show({ title: "Tarefa adicionada!", status: "success" });
       } else {
-        // Atualiza tarefa existente
+        /////// Atualiza tarefa existente(editar)
         await axios.put(`http://localhost:3000/tasks/${editingTaskId}`, {
           text: currentTask.trim(),
           done: tasks.find(t => t.id === editingTaskId)?.done,

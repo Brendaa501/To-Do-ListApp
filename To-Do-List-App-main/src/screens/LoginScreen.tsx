@@ -4,13 +4,13 @@ import { Ionicons } from "@expo/vector-icons";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-// Define os tipos das props que a tela de login recebe
+//  tipos das props que a tela de login recebe
 interface LoginProps {
   onLogin: (user: { id: number; name: string; email: string }) => void; // função chamada após login
   goToRegister: () => void; // função para navegar para a tela de cadastro
 }
 
-// Componente principal da tela de login
+
 export default function LoginScreen({ onLogin, goToRegister }: LoginProps) {
   // Estado para armazenar o email digitado
   const [email, setEmail] = useState("");
