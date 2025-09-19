@@ -3,13 +3,13 @@ import { Box, HStack, IconButton, Icon, Text, Image, Pressable } from "native-ba
 import { Ionicons } from "@expo/vector-icons";
 
 interface NavBarProps {
-  title?: string;
-  showBack?: boolean;
-  goBack?: () => void;
-  showAvatar?: boolean;
-  avatarUri?: string;
-  onAvatarPress?: () => void;
-  goToLogin?: () => void; // função para voltar ao login
+  title?: string;                // Título central da barra
+  showBack?: boolean;            // Mostrar botão de voltar
+  goBack?: () => void;           // Função de voltar
+  showAvatar?: boolean;          // Mostrar avatar com iniciais
+  userName?: string;             // Nome do usuário para pegar iniciais
+  onAvatarPress?: () => void;    // Função ao clicar no avatar
+  goToLogin?: () => void;        // Função para voltar ao login
 }
 
 export default function NavBar({
@@ -17,14 +17,23 @@ export default function NavBar({
   showBack = false,
   goBack,
   showAvatar = false,
-  avatarUri,
+  userName,
   onAvatarPress,
   goToLogin,
 }: NavBarProps) {
+
+  // Função para pegar até 2 iniciais do nome
+  const getInitials = (name: string) => {
+    if (!name) return "";
+    const names = name.split(" ");
+    return names.map(n => n[0].toUpperCase()).join("").slice(0, 2);
+  };
+
   return (
     <Box bg="green.500" px={4} py={3}>
       <HStack alignItems="center" justifyContent="space-between">
-        {/* Botão voltar ou logo clicável */}
+
+        {/* Botão de voltar ou logo clicável */}
         {showBack ? (
           <IconButton
             icon={<Icon as={Ionicons} name="arrow-back" color="white" size="lg" />}
@@ -48,18 +57,29 @@ export default function NavBar({
           {title}
         </Text>
 
-        {/* Avatar */}
-        {showAvatar && avatarUri ? (
+        {/* Avatar com iniciais */}
+        {showAvatar && userName ? (
           <Pressable onPress={onAvatarPress}>
-            <Image
-              source={{ uri: avatarUri }}
-              alt="Avatar"
-              size="sm"             
-              borderRadius="full"   
-            />
+            <Box
+              w={16} h={16}                  // tamanho do círculo
+              borderRadius="full"
+              bg="green.700"                 // cor de fundo
+              justifyContent="center"         // centraliza vertical
+              alignItems="center"             // centraliza horizontal
+              display="flex"
+            >
+              <Text
+                color="white"
+                fontWeight="bold"
+                fontSize="lg"
+                textAlign="center"           // centraliza texto dentro do círculo
+              >
+                {getInitials(userName)}
+              </Text>
+            </Box>
           </Pressable>
         ) : (
-          <Box w={10} />
+          <Box w={12} h={12} />           // espaço vazio para manter layout
         )}
       </HStack>
     </Box>

@@ -1,34 +1,55 @@
 import React from "react";
-import { Box, Text, VStack, Image, Button } from "native-base";
+import { Box, Text, VStack, Button } from "native-base";
 import NavBar from "./components/NavBar";
 
+// Define os tipos das props que a tela recebe
 interface ProfileProps {
-  goTo: (screen: "tasks" | "login") => void;
-  user: { email: string };
-  logout: () => void;
+  goTo: (screen: "tasks" | "login") => void; // função para navegar entre telas
+  user: { name: string; email: string };     // dados do usuário logado
+  logout: () => void;                         // função para deslogar
 }
 
+// Componente principal da tela de perfil
 export default function ProfileScreen({ goTo, user, logout }: ProfileProps) {
+
+  // Função para pegar as iniciais do nome do usuário
+  const getInitials = (name: string) => {
+    if (!name) return "";                    // se não tiver nome, retorna string vazia
+    const names = name.split(" ");           // divide o nome por espaços
+    return names.map(n => n[0].toUpperCase()) // pega a primeira letra de cada nome e coloca maiúscula
+                .join("")                    // junta todas as letras
+                .slice(0, 2);                // pega apenas as duas primeiras letras
+  };
+
   return (
     <Box flex={1}>
-      {/* Barra de navegação com seta de voltar */}
       <NavBar title="Perfil" showBack goBack={() => goTo("tasks")} />
 
       <VStack flex={1} justifyContent="center" alignItems="center" space={4} p={5}>
-        {/* Avatar do usuário */}
-        <Image
-          source={{ uri: "https://i.pravatar.cc/150?img=5" }}
-          alt="Avatar"
-          size="2xl"
-          borderRadius={100}
-        />
-        <Text fontSize="2xl">Perfil</Text>
+        {/* Avatar com iniciais */}
+        <Box
+          w={24} h={24}                    // círculo maior
+          borderRadius="full"
+          bg="green.700"
+          justifyContent="center"
+          alignItems="center"
+          display="flex"
+        >
+          <Text
+            color="white"
+            fontWeight="bold"
+            fontSize="4xl"                  // letra grande
+            textAlign="center"
+          >
+            {getInitials(user.name)}
+          </Text>
+        </Box>
+
+      
+        <Text>Nome: {user.name}</Text>
         <Text>Email: {user.email}</Text>
 
-        {/* Botão de sair */}
-        <Button colorScheme="red" mt={4} onPress={logout}>
-          Sair
-        </Button>
+        <Button colorScheme="red" mt={4} onPress={logout}>Sair</Button>
       </VStack>
     </Box>
   );

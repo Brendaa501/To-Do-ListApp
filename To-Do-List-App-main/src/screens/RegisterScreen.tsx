@@ -1,60 +1,58 @@
 import React, { useState } from "react";
-import { Box, Input, Button, VStack, Heading, Image, Pressable, Icon } from "native-base";
+import { Box, Input, Button, VStack, Heading, Image, Pressable, Icon, Text } from "native-base";
 import { Ionicons } from "@expo/vector-icons";
+import axios from "axios";
 import NavBar from "./components/NavBar";
 
+// Define os tipos das props que a tela recebe
 interface RegisterProps {
-  onRegister: (name: string, email: string, password: string) => void;
-  goToLogin: () => void;
+  goToLogin: () => void; // função para navegar de volta para a tela de login
+  onRegister?: (user: { id: number; name: string; email: string }) => void; // callback opcional ao registrar
 }
 
-export default function RegisterScreen({ onRegister, goToLogin }: RegisterProps) {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
+// Componente principal da tela de cadastro
+export default function RegisterScreen({ goToLogin, onRegister }: RegisterProps) {
+
+  // Estados para armazenar dados do formulário
+  const [name, setName] = useState("");           // Nome do usuário
+  const [email, setEmail] = useState("");         // Email do usuário
+  const [password, setPassword] = useState("");   // Senha do usuário
+  const [showPassword, setShowPassword] = useState(false); // Para mostrar/ocultar senha
+  const [message, setMessage] = useState("");     // Mensagem de feedback
+  const [isError, setIsError] = useState(false);  // Indica se a mensagem é de erro
+
+  // Função que será chamada ao pressionar o botão "Cadastrar"
+  const handleRegister = async () => {
+    try {
+      // Faz requisição POST para a rota de cadastro
+      const res = await axios.post("http://localhost:3000/register", { name, email, password });
+
+      // Atualiza mensagem de sucesso
+      setMessage(res.data.message || "Cadastro realizado com sucesso!");
+      setIsError(false);
+
+      // Chama callback opcional passando os dados do usuário recém-criado
+      onRegister?.({ id: res.data.user.id, name: res.data.user.name, email: res.data.user.email });
+
+      // Após 1,5 segundos, redireciona para a tela de login
+      setTimeout(() => goToLogin(), 1500);
+    } catch (err: any) {
+      // Em caso de erro, mostra mensagem de erro
+      setMessage(err.response?.data?.error || "Erro ao cadastrar");
+      setIsError(true);
+    }
+  };
 
   return (
     <Box flex={1} bg="white">
-      <NavBar title="Cadastro" showBack goBack={goToLogin} goToLogin={goToLogin} />
+      <NavBar title="Cadastro" showBack goBack={goToLogin} />
       <Box flex={1} justifyContent="center" alignItems="center" p={5}>
-        <VStack space={5} width="90%" alignItems="center">
-          <Image
-            source={require("../../assets/logo.png")}
-            alt="Logo OrganizeMais"
-            height={100}
-            width={220}
-            resizeMode="contain"
-            mb={1}
-          />
+        <VStack space={3} width="90%" alignItems="center">
+          <Image source={require("../../assets/logo.png")} alt="Logo" height={100} width={220} resizeMode="contain" mb={1} />
+          <Heading size="lg" mb={3}>Cadastro</Heading>
 
-          {/* Input de Nome */}
-          <Input
-            placeholder="Nome"
-            value={name}
-            onChangeText={setName}
-            width="100%"
-            h={12}
-            variant="outline"
-            borderColor="green.500"
-            _hover={{ borderColor: "green.600", bg: "green.100" }}
-            _focus={{ borderColor: "green.700", bg: "green.50" }}
-          />
-
-          {/* Input de Email */}
-          <Input
-            placeholder="Email"
-            value={email}
-            onChangeText={setEmail}
-            width="100%"
-            h={12}
-            variant="outline"
-            borderColor="green.500"
-            _hover={{ borderColor: "green.600", bg: "green.100" }}
-            _focus={{ borderColor: "green.700", bg: "green.50" }}
-          />
-
-          {/* Input de Senha */}
+          <Input placeholder="Nome" value={name} onChangeText={setName} width="100%" h={12} borderColor="green.500" />
+          <Input placeholder="Email" value={email} onChangeText={setEmail} width="100%" h={12} borderColor="green.500" />
           <Input
             placeholder="Senha"
             value={password}
@@ -62,35 +60,21 @@ export default function RegisterScreen({ onRegister, goToLogin }: RegisterProps)
             type={showPassword ? "text" : "password"}
             width="100%"
             h={12}
-            variant="outline"
             borderColor="green.500"
-            _hover={{ borderColor: "green.600", bg: "green.100" }}
-            _focus={{ borderColor: "green.700", bg: "green.50" }}
             InputRightElement={
               <Pressable onPress={() => setShowPassword(!showPassword)}>
-                <Icon
-                  as={Ionicons}
-                  name={showPassword ? "eye-off" : "eye"}
-                  size={5}
-                  mr={3}
-                  color="muted.400"
-                />
+                <Icon as={Ionicons} name={showPassword ? "eye-off" : "eye"} size={5} mr={3} color="muted.400" />
               </Pressable>
             }
           />
 
-          {/* Botão verde */}
-          <Button
-            width="100%"
-            h={12}
-            bg="green.500"
-            _hover={{ bg: "green.600" }}
-            _pressed={{ bg: "green.700" }}
-            shadow={2}
-            onPress={goToLogin} // volta para login ao cadastrar
-          >
-            Cadastrar
-          </Button>
+          {message ? (
+            <Box w="100%" p={2} bg={isError ? "red.100" : "green.100"} borderRadius={5}>
+              <Text color={isError ? "red.600" : "green.600"} textAlign="center" fontWeight="bold">{message}</Text>
+            </Box>
+          ) : null}
+
+          <Button width="100%" h={12} bg="green.500" onPress={handleRegister}>Cadastrar</Button>
         </VStack>
       </Box>
     </Box>
